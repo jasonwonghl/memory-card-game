@@ -1,0 +1,12 @@
+{
+  "name": "memory-card-game",
+  "displayName": "memory-card-game",
+  "expo": {
+    "name": "memory-card-game",
+    "slug": "memory-card-game",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
