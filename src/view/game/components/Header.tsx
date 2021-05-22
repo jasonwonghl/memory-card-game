@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { textVariants } from '../../../styles/styles'
+import { textVariants } from 'styles/styles'
 
 interface Props {
   movesCount?: number
