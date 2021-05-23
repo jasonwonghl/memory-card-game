@@ -20,9 +20,10 @@
     "baseUrl": "./",
     "paths": {
       "styles/*": ["src/styles/*"],
-      "view/*": ["src/view/*"]
+      "view/*": ["src/view/*"],
+      "helpers/*": ["src/helpers/*"]
     },
-    "rootDirs": ["src", "stories"]
+    "rootDirs": ["src"]
   },
   "exclude": [
     "node_modules",
