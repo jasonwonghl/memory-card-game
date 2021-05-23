@@ -1,14 +1,26 @@
+import { generateRandomNumberArray, shuffleArray } from 'helpers/utils'
 import React, { useEffect, useRef, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { palette } from 'styles/styles'
 import Card from 'view/game/components/Card'
 import Header from 'view/game/components/Header'
 
 const MS_PER_SECOND = 1000
+const CARD_COLUMNS = 3
+const CARD_PAIRS_VALUE = 6
+const CARD_COUNT = CARD_PAIRS_VALUE * 2
+const MAX = 100
+const DURATION = MS_PER_SECOND * 0.8
 
 export default function GameScreen() {
   const safeAreaInsets = useSafeAreaInsets()
 
+  const [cards, setCards] = useState<number[]>([])
+  const [cardDimensions, setCardDimensions] = useState<{
+    width: number
+    height: number
+  }>({ width: 0, height: 0 })
   const [movesCount, setMovesCount] = useState<number>(0)
   const [openCards, setOpenCards] = useState<number[]>([])
   const [clearedCards, setClearedCards] = useState<{ [key: string]: boolean }>(
@@ -19,12 +31,33 @@ export default function GameScreen() {
 
   const timeout = useRef<NodeJS.Timeout>()
 
-  const numbers = [2, 3, 4, 5, 2, 3, 4, 5, 2, 3, 4, 5]
-  const height = 100 / Math.round(numbers.length / 3) + '%'
+  /**
+   * Generate, shuffle and set the card values
+   */
+  const generateCards = () => {
+    const uniqueNumbers = generateRandomNumberArray(CARD_PAIRS_VALUE, MAX)
+    setCards(shuffleArray(uniqueNumbers.concat(uniqueNumbers)))
+  }
+
+  /**
+   * Get and set the width and height of each card by percentage
+   */
+  const getCardDimensions = () => {
+    // Get the number of rows
+    const rows = Math.ceil(CARD_COUNT / CARD_COLUMNS)
+
+    // Calculate the percentage height of each card based on the number of cards
+    const height = 100 / rows
+
+    // Calculate the percentage width of each card based on the number of cards and columns
+    const width = 100 / CARD_COLUMNS
+
+    setCardDimensions({ width, height })
+  }
 
   const onCardPress = (idx: number) => {
-    // Increment the number of user moves if the number of flipped cards is exactly 2
-    if (openCards.length < 2) {
+    // Increment the number of user moves
+    if (openCards.length <= 2) {
       setMovesCount(movesCount + 1)
     }
 
@@ -50,9 +83,9 @@ export default function GameScreen() {
     // Re-enable flipping of cards
     setShouldDisableAllCards(false)
 
-    // If the card values match, add the card value as a key with corresponding boolean value of true to the cleared cards object
-    if (numbers[firstCard] === numbers[secondCard]) {
-      setClearedCards((prev) => ({ ...prev, [numbers[firstCard]]: true }))
+    // If the card values match, add the card value as the key with corresponding boolean value of true to the cleared cards object
+    if (cards[firstCard] === cards[secondCard]) {
+      setClearedCards((prev) => ({ ...prev, [cards[firstCard]]: true }))
 
       // Clear the open cards array
       setOpenCards([])
@@ -82,7 +115,38 @@ export default function GameScreen() {
     return clearedCards[val] === true
   }
 
-  const restart = () => {}
+  /**
+   * Checks to see if all the cards are cleared and displays a congratulatory message
+   */
+  const checkIsCompleted = () => {
+    if (Object.keys(clearedCards).length === CARD_PAIRS_VALUE) {
+      showCompletionAlert()
+    }
+  }
+
+  const showCompletionAlert = () => {
+    Alert.alert(
+      'Congratulations!',
+      `You win the game by ${movesCount} steps!`,
+      [
+        {
+          text: 'Try another round',
+          onPress: restart,
+        },
+      ]
+    )
+  }
+
+  /**
+   * Reset game state
+   */
+  const restart = () => {
+    setClearedCards({})
+    setOpenCards([])
+    setMovesCount(0)
+    setShouldDisableAllCards(false)
+    setTimeout(generateCards, DURATION)
+  }
 
   useEffect(() => {
     // Run the comparison function if exactly 2 cards are open
@@ -96,6 +160,18 @@ export default function GameScreen() {
     }
   }, [openCards])
 
+  useEffect(() => {
+    checkIsCompleted()
+  }, [clearedCards])
+
+  useEffect(() => {
+    // Initialise the cards
+    if (cards.length === 0) {
+      generateCards()
+      getCardDimensions()
+    }
+  }, [])
+
   return (
     <View
       style={[
@@ -108,14 +184,15 @@ export default function GameScreen() {
     >
       <Header onPress={() => restart()} movesCount={movesCount} />
       <View style={styles.cardsContainer}>
-        {numbers.map((val, idx) => (
+        {cards.map((val, idx) => (
           <Card
             key={idx}
             val={val}
-            height={height}
+            dimensions={cardDimensions}
             cleared={checkIsCleared(val.toString())}
             flipped={checkIsFlipped(idx)}
             disabled={shouldDisableAllCards}
+            animationDuration={DURATION}
             handlePress={() => onCardPress(idx)}
           />
         ))}
@@ -127,7 +204,7 @@ export default function GameScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#39353C',
+    backgroundColor: palette.greyPrimary,
   },
   cardsContainer: {
     flex: 1,

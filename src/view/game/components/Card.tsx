@@ -12,29 +12,29 @@ import { palette, textVariants } from 'styles/styles'
 
 interface Props {
   val: number
-  height: string
+  dimensions: { width: number; height: number }
   cleared: boolean
-  flipped?: boolean | null
+  flipped: boolean | null
   disabled: boolean
+  animationDuration?: number
   handlePress: () => void
 }
 
-const DURATION = 800
 const NO_REVOLUTION = 0
-const QUARTER_REVOLUTION = 90
 const HALF_REVOLUTION = 180
 const FULL_REVOLUTION = 360
 
 const Card = ({
   val,
-  height,
+  dimensions,
   cleared = false,
   flipped = false,
   disabled = false,
+  animationDuration = 500,
   handlePress,
 }: Props) => {
   const animationSettings = {
-    duration: DURATION,
+    duration: animationDuration,
     easing: Easing.inOut(Easing.cubic),
   }
 
@@ -85,10 +85,16 @@ const Card = ({
     if (!cleared) {
       flip()
     }
-  }, [flipped])
+  }, [flipped, cleared])
 
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.container, { height }]}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        styles.container,
+        { width: `${dimensions.width - 4}%`, height: `${dimensions.height}%` },
+      ]}
+    >
       <Animated.View style={[styles.card, frontAnimatedStyle]}>
         <Text style={[styles.label, styles.frontLabel]}>{val}</Text>
       </Animated.View>
@@ -103,8 +109,7 @@ export default Card
 
 const styles = StyleSheet.create({
   container: {
-    flexBasis: '31%',
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   card: {
     flex: 1,
