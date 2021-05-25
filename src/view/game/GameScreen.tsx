@@ -97,6 +97,7 @@ export default function GameScreen({
       return
     }
 
+    // Delay card value refresh
     timeout.current = setTimeout(() => {
       setOpenCards([])
     }, MS_PER_SECOND)
