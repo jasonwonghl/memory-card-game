@@ -128,6 +128,9 @@ export default function GameScreen({
     }
   }
 
+  /**
+   * Show the congratulations alert when user has cleared all cards
+   */
   const showCompletionAlert = () => {
     Alert.alert(
       'Congratulations!',
