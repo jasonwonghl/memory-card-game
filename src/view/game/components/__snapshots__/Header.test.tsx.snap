@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header should render correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "height": 60,
+      "justifyContent": "space-between",
+      "paddingHorizontal": 30,
+      "paddingVertical": 10,
+    }
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+    testID="RestartButton"
+  >
+    <Text
+      style={
+        Object {
+          "color": "dodgerblue",
+          "fontSize": 18,
+        }
+      }
+    >
+      Restart
+    </Text>
+  </View>
+  <View>
+    <Text
+      style={
+        Object {
+          "color": "white",
+          "fontSize": 28,
+          "textTransform": "uppercase",
+        }
+      }
+    >
+      Steps:
+       
+      <Text
+        style={
+          Object {
+            "color": "dodgerblue",
+          }
+        }
+        testID="StepsCountText"
+      >
+        1
+      </Text>
+    </Text>
+  </View>
+</View>
+`;

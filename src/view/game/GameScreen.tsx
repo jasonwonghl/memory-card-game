@@ -6,14 +6,18 @@ import { palette } from 'styles/styles'
 import Card from 'view/game/components/Card'
 import Header from 'view/game/components/Header'
 
-const MS_PER_SECOND = 1000
-const CARD_COLUMNS = 3
-const CARD_PAIRS_VALUE = 6
-const CARD_COUNT = CARD_PAIRS_VALUE * 2
-const MAX = 100
-const DURATION = MS_PER_SECOND * 0.8
+export const MS_PER_SECOND = 1000
+export const CARD_PAIRS_VALUE = 6
+export const CARD_COUNT = CARD_PAIRS_VALUE * 2
+export const CARD_COLUMNS = 3
+export const MAX = 100
+export const DURATION = MS_PER_SECOND * 0.8
 
-export default function GameScreen() {
+export default function GameScreen({
+  cardPairsValue = CARD_PAIRS_VALUE,
+}: {
+  cardPairsValue?: number
+}) {
   const safeAreaInsets = useSafeAreaInsets()
 
   const [cards, setCards] = useState<number[]>([])
@@ -35,7 +39,7 @@ export default function GameScreen() {
    * Generate, shuffle and set the card values
    */
   const generateCards = () => {
-    const uniqueNumbers = generateRandomNumberArray(CARD_PAIRS_VALUE, MAX)
+    const uniqueNumbers = generateRandomNumberArray(cardPairsValue, MAX)
     setCards(shuffleArray(uniqueNumbers.concat(uniqueNumbers)))
   }
 
@@ -119,7 +123,7 @@ export default function GameScreen() {
    * Checks to see if all the cards are cleared and displays a congratulatory message
    */
   const checkIsCompleted = () => {
-    if (Object.keys(clearedCards).length === CARD_PAIRS_VALUE) {
+    if (Object.keys(clearedCards).length === cardPairsValue) {
       showCompletionAlert()
     }
   }
@@ -131,7 +135,7 @@ export default function GameScreen() {
       [
         {
           text: 'Try another round',
-          onPress: restart,
+          onPress: () => restart(),
         },
       ]
     )
@@ -174,6 +178,7 @@ export default function GameScreen() {
 
   return (
     <View
+      testID={'GameScreen'}
       style={[
         styles.container,
         {
@@ -187,6 +192,7 @@ export default function GameScreen() {
         {cards.map((val, idx) => (
           <Card
             key={idx}
+            testID={`Card${idx}`}
             val={val}
             dimensions={cardDimensions}
             cleared={checkIsCleared(val.toString())}

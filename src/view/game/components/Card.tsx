@@ -11,6 +11,7 @@ import Animated, {
 import { palette, textVariants } from 'styles/styles'
 
 interface Props {
+  testID: string
   val: number
   dimensions: { width: number; height: number }
   cleared: boolean
@@ -25,6 +26,7 @@ const HALF_REVOLUTION = 180
 const FULL_REVOLUTION = 360
 
 const Card = ({
+  testID,
   val,
   dimensions,
   cleared = false,
@@ -89,14 +91,23 @@ const Card = ({
 
   return (
     <TouchableOpacity
+      testID={testID}
       onPress={onPress}
       style={[
         styles.container,
         { width: `${dimensions.width - 4}%`, height: `${dimensions.height}%` },
       ]}
     >
-      <Animated.View style={[styles.card, frontAnimatedStyle]}>
-        <Text style={[styles.label, styles.frontLabel]}>{val}</Text>
+      <Animated.View
+        testID={`${testID}Front${flipped ? 'Flipped' : ''}`}
+        style={[styles.card, frontAnimatedStyle]}
+      >
+        <Text
+          testID={`${testID}Text`}
+          style={[styles.label, styles.frontLabel]}
+        >
+          {val}
+        </Text>
       </Animated.View>
       <Animated.View style={[styles.card, styles.cardBack, backAnimatedStyle]}>
         <Text style={styles.label}>?</Text>

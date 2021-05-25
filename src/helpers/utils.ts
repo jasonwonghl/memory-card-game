@@ -29,3 +29,15 @@ export const generateRandomNumberArray = (count: number, max: number) => {
 
   return shuffledArray
 }
+
+/**
+ * Checks whether 2 arrays with primitive values are the same
+ * @param a The first array
+ * @param b The second array
+ * @returns {boolean} Returns the boolean indicating whether the 2 arrays are the same
+ */
+export const arrayEquals=(a:number[],b: number[]) => {
+  return Array.isArray(a) && Array.isArray(b) &&
+  a.length === b.length &&
+  a.every((val, index) => val === b[index])
+}

@@ -10,12 +10,15 @@ interface Props {
 const Header = ({ movesCount = 0, onPress }: Props) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity testID={'RestartButton'} onPress={onPress}>
         <Text style={styles.restartButton}>Restart</Text>
       </TouchableOpacity>
       <View>
         <Text style={styles.movesLabel}>
-          Steps: <Text style={styles.movesCount}>{movesCount}</Text>
+          Steps:{' '}
+          <Text testID={'StepsCountText'} style={styles.movesCount}>
+            {movesCount}
+          </Text>
         </Text>
       </View>
     </View>

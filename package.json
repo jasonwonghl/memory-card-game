@@ -4,7 +4,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
-    "start": "react-native start"
+    "start": "react-native start",
+    "test": "jest --verbose --silent --coverage"
   },
   "dependencies": {
     "expo": "~41.0.1",
@@ -23,13 +24,57 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/jest-native": "^4.0.1",
+    "@testing-library/react-native": "^7.2.0",
+    "@types/enzyme": "^3.10.8",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.23",
     "@types/react-native": "^0.64.5",
+    "@types/react-test-renderer": "^17.0.1",
+    "@types/testing-library__jest-dom": "^5.9.5",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.23.2",
+    "jest": "^26.6.3",
+    "jest-enzyme": "^7.1.2",
     "prettier": "^2.3.0",
+    "ts-jest": "^26.5.6",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
+  },
+  "jest": {
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.jest.json"
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "^root(.*)$": "<rootDir>/src$1",
+      "^styles(.*)": "<rootDir>/src/styles$1",
+      "^view(.*)": "<rootDir>/src/view$1",
+      "^helpers(.*)": "<rootDir>/src/helpers$1"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "setupFilesAfterEnv": [
+      "./tests/setup.ts",
+      "@testing-library/jest-native/extend-expect"
+    ]
   },
   "private": true
 }
